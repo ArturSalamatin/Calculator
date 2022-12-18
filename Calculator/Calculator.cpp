@@ -1,11 +1,37 @@
 // Calculator.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
+#include <iostream>
+#include "misc_func.h"
 #include "token_test.hpp"
 
 int main()
 {
 	token_test::test1();
+	try
+	{
+		while (std::cin)
+		{
+			std::cout << "> " << std::flush;
+			Token* t = ts.get();
+			while (t->kind == ';') t = ts.get();
+			if (t->kind == 'q')
+				return 0;
+
+			ts.putback(t);
+			std::cout << "= " << expression() << std::endl;
+		}
+		return 0;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		return 1;
+	}
+	catch (...)
+	{
+		std::cerr << "exception \n";
+		return 2;
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
